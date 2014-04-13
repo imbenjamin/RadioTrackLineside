@@ -241,7 +241,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:RadioTrack Lineside"
         "ProductCode" = "8:{D08842A2-B489-49D8-83A5-46CDDEFBD483}"
-        "PackageCode" = "8:{404DF82F-471C-4F4B-A564-628860813A59}"
+        "PackageCode" = "8:{99163BC9-36D6-4F0D-8970-FFBCD962203B}"
         "UpgradeCode" = "8:{C54B7B3D-F4A4-4C1E-A33E-FCDDCB6EC73A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

@@ -26,8 +26,8 @@ namespace RadioTrack_ReaderClient.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=ben-win-server;user id=radiotrackuser;password=finalyearproject;persistsec" +
-            "urityinfo=True;database=rfidtrack")]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=imbenjamin.no-ip.biz;port=3306;user id=radiotrackuser;password=finalyearpr" +
+            "oject;persistsecurityinfo=True;database=rfidtrack")]
         public string databaseConnStr_primary {
             get {
                 return ((string)(this["databaseConnStr_primary"]));
@@ -73,7 +73,7 @@ namespace RadioTrack_ReaderClient.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("server=;user id=;password=;persistsecurityinfo=True;database=")]
+        [global::System.Configuration.DefaultSettingValueAttribute("server=;port=;user id=;password=;persistsecurityinfo=True;database=")]
         public string databaseConnStr_backup {
             get {
                 return ((string)(this["databaseConnStr_backup"]));

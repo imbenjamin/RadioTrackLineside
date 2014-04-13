@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 // This provides a C# wrapper class on top of the pcProxAPI.dll
 // to that the functions may be called from C#
 //
-namespace RFIDeas_pcProxAPI
+namespace RFIDeas_pcProxAPI_forTest
 {
     //
     // Low level legacy Interface to pcProxAPI.DLL

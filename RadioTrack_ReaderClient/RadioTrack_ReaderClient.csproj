@@ -185,7 +185,7 @@
     <Content Include="lcl_logo_small_light %281%29.ico" />
     <Content Include="lcl_logo_small_light.ico" />
     <Content Include="pcProxAPI.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Resources\lcl_logo_full_light.png" />
   </ItemGroup>

@@ -75,6 +75,7 @@
             this.usbConnCheckWorker = new System.ComponentModel.BackgroundWorker();
             this.dbConnCheckWorker = new System.ComponentModel.BackgroundWorker();
             this.rfidtrackDataSet = new RadioTrack_ReaderClient.rfidtrackDataSet();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statusStrip.SuspendLayout();
             this.tbllayout_wholeWindow.SuspendLayout();
             this.tbllayout_leftHalfWindow.SuspendLayout();
@@ -423,10 +424,10 @@
             this.databaseMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.databaseMenu_primary,
             this.databaseMenu_backup,
+            this.toolStripSeparator1,
             this.databaseMenu_edit});
             this.databaseMenu.Name = "databaseMenu";
-            this.databaseMenu.OwnerItem = this.notifIconMenu_database;
-            this.databaseMenu.Size = new System.Drawing.Size(222, 70);
+            this.databaseMenu.Size = new System.Drawing.Size(222, 98);
             this.databaseMenu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.databaseMenu_ItemClicked);
             // 
             // databaseMenu_primary
@@ -530,6 +531,11 @@
             this.rfidtrackDataSet.DataSetName = "rfidtrackDataSet";
             this.rfidtrackDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(218, 6);
+            // 
             // form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -611,6 +617,7 @@
         private System.Windows.Forms.ToolStripMenuItem databaseMenu_backup;
         private System.Windows.Forms.ToolStripMenuItem databaseMenu_edit;
         private System.Windows.Forms.ToolStripMenuItem notifIconMenu_thisStation;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 
