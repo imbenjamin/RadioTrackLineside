@@ -2,6 +2,7 @@
 using RFIDeas_pcProxAPI_forTest;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using MySql.Data.MySqlClient;
 
 namespace MainTestProject
 {
@@ -80,22 +81,6 @@ namespace MainTestProject
             //Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
-
-        /// <summary>
-        ///A test for getCardId
-        ///</summary>
-        [TestMethod()]
-        [DeploymentItem("RadioTrack_ReaderClient.exe")]
-        public void getCardIdTest()
-        {
-            form_Main_Accessor target = new form_Main_Accessor(); // TODO: Initialize to an appropriate value
-            long expected = 38660619519; // TODO: Initialize to an appropriate value
-            long actual;
-            actual = target.getCardId();
-            Assert.AreEqual(expected, actual);
-            //Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
         /// <summary>
         ///A test for getBuildStatusFromStationId
         ///</summary>
@@ -111,6 +96,33 @@ namespace MainTestProject
             actual = target.getBuildStatusFromStationId(stationId, stationHistory);
             Assert.AreEqual(expected, actual);
             //Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        [TestMethod()]
+        [DeploymentItem("RadioTrack_ReaderClient.exe")]
+        public void canConnectToDatabase()
+        {
+            form_Main_Accessor target = new form_Main_Accessor();
+            MySqlConnection conn = target.dbConn;
+            bool actual;
+            bool expected = true;
+            if (conn.State == System.Data.ConnectionState.Closed) conn.Open();
+            actual = conn.Ping();
+            if (conn.State == System.Data.ConnectionState.Open) conn.Close();
+
+            Assert.AreEqual(expected, actual, "Cannot ping database");
+        }
+
+        [TestMethod()]
+        [DeploymentItem("RadioTrack_ReaderClient.exe")]
+        public void canConnectToUsbReader()
+        {
+            int actual;
+            int expected = 1;
+
+            actual = pcProxDLLAPI.usbConnect();
+
+            Assert.AreEqual(expected, actual, "No connection to USB Reader");
         }
     }
 }
