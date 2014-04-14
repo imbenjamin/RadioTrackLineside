@@ -93,7 +93,7 @@ namespace MainTestProject
             long actual;
             actual = target.getCardId();
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            //Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
