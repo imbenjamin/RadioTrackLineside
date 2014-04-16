@@ -16,6 +16,9 @@ namespace RadioTrack_ReaderClient
         string primaryConnStr;
         string backupConnStr;
 
+        // Default port for MySQL is 3306
+        uint defaultPort = 3306;
+
         public db_editor()
         {
             InitializeComponent();
@@ -32,7 +35,7 @@ namespace RadioTrack_ReaderClient
             catch (Exception ex) { }
 
             // Populate textboxes with existing data
-            
+
             // Primary
             MySqlConnectionStringBuilder builder_p = new MySqlConnectionStringBuilder(primaryConnStr);
             tb_server_p.Text = builder_p.Server;
@@ -57,9 +60,6 @@ namespace RadioTrack_ReaderClient
 
         private void btn_save_Click(object sender, EventArgs e)
         {
-            // Default port for MySQL is 3306
-            uint defaultPort = 3306;
-
             // Save the new values
             MySqlConnectionStringBuilder builder_p = new MySqlConnectionStringBuilder();
             builder_p.Server = tb_server_p.Text.Trim();
@@ -77,8 +77,18 @@ namespace RadioTrack_ReaderClient
             builder_b.UserID = tb_username_b.Text.Trim();
             builder_b.Password = tb_password_b.Text.Trim();
 
-            save(builder_p.GetConnectionString(true), builder_b.GetConnectionString(true));
-            this.Close();
+            Exception ex_p;
+            Exception ex_b;
+            if (validateConnection(builder_p, out ex_p))
+            {
+                if (validateConnection(builder_b, out ex_b))
+                {
+                    save(builder_p.GetConnectionString(true), builder_b.GetConnectionString(true));
+                    this.Close();
+                }
+                else MessageBox.Show("There is a problem with the backup connection configuration!" + Environment.NewLine + "Please verify that the configuration entered is correct." + Environment.NewLine + Environment.NewLine + "(" + ex_b.Message + ")", "Backup Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else MessageBox.Show("There is a problem with the primary connection configuration!" + Environment.NewLine + "Please verify that the configuration entered is correct." + Environment.NewLine + Environment.NewLine + "(" + ex_p.Message + ")", "Primary Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void save(string primaryConnStr, string backupConnStr)
@@ -87,12 +97,92 @@ namespace RadioTrack_ReaderClient
 
             var pConfig = config.ConnectionStrings.ConnectionStrings["RadioTrack_ReaderClient.Properties.Settings.databaseConnStr_primary"];
             var bConfig = config.ConnectionStrings.ConnectionStrings["RadioTrack_ReaderClient.Properties.Settings.databaseConnStr_backup"];
-            
-            if(!String.IsNullOrWhiteSpace(primaryConnStr)) pConfig.ConnectionString = primaryConnStr;
-            if(!String.IsNullOrWhiteSpace(backupConnStr)) bConfig.ConnectionString = backupConnStr;
+
+            if (!String.IsNullOrWhiteSpace(primaryConnStr)) pConfig.ConnectionString = primaryConnStr;
+            if (!String.IsNullOrWhiteSpace(backupConnStr)) bConfig.ConnectionString = backupConnStr;
 
             config.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection("connectionStrings");
         }
+
+        private bool validateConnection(MySqlConnectionStringBuilder ConnStrBuilder, out Exception error)
+        {
+            error = (Exception)null;
+            if (!String.IsNullOrWhiteSpace(ConnStrBuilder.Server) && !String.IsNullOrWhiteSpace(ConnStrBuilder.Database) && !String.IsNullOrWhiteSpace(ConnStrBuilder.UserID) && !String.IsNullOrWhiteSpace(ConnStrBuilder.Password))
+            {
+                bool result = false;
+                try
+                {
+                    string ConnStr = ConnStrBuilder.GetConnectionString(true);
+                    MySqlConnection conn = new MySqlConnection(ConnStr);
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    result = conn.Ping();
+                    if (conn.State == ConnectionState.Open) conn.Open();
+                }
+                catch (Exception ex)
+                {
+                    error = ex;
+                }
+                return result;
+            }
+            else
+            { return true; }
+        }
+
+        #region Port Validating
+        private void tb_port_p_Validating(object sender, CancelEventArgs e)
+        {
+            // Validates port to contains a number between 1 and 65535
+            TextBox tb = (TextBox)sender;
+
+            if (!String.IsNullOrWhiteSpace(tb.Text))
+            {
+                try { validatePort(tb); }
+                catch (Exception ex)
+                {
+                    e.Cancel = true;
+                    tb.Select(0, tb.Text.Length);
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+                tb.Text = defaultPort.ToString();
+        }
+
+        private void tb_port_b_Validating(object sender, CancelEventArgs e)
+        {
+            // Validates port to contains a number between 1 and 65535
+            TextBox tb = (TextBox)sender;
+
+            if (!String.IsNullOrWhiteSpace(tb.Text))
+            {
+                try { validatePort(tb); }
+                catch (Exception ex)
+                {
+                    e.Cancel = true;
+                    tb.Select(0, tb.Text.Length);
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+                tb.Text = defaultPort.ToString();
+        }
+
+        private void validatePort(TextBox tb)
+        {
+            int port;
+            if (!int.TryParse(tb.Text, out port))
+            {
+                throw new FormatException("The Port you have entered must be a number", (Exception)null);
+            }
+            else
+            {
+                if (!(port >= 1 && port <= 65535))
+                {
+                    throw new ArgumentOutOfRangeException("The Port must be between 1 and 65535", (Exception)null);
+                }
+            }
+        }
+        #endregion
     }
 }
