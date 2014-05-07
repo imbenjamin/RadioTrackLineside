@@ -53,11 +53,13 @@ namespace RadioTrack_ReaderClient
             tb_password_b.Text = builder_b.Password;
         }
 
+        // Cancel button clicked
         private void btn_cancel_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
+        // Save button clicked
         private void btn_save_Click(object sender, EventArgs e)
         {
             // Save the new values
@@ -91,6 +93,11 @@ namespace RadioTrack_ReaderClient
             else MessageBox.Show("There is a problem with the primary connection configuration!" + Environment.NewLine + "Please verify that the configuration entered is correct." + Environment.NewLine + Environment.NewLine + "(" + ex_p.Message + ")", "Primary Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        /// <summary>
+        /// Save the given configurations to the application settings
+        /// </summary>
+        /// <param name="primaryConnStr">generated primary connection string</param>
+        /// <param name="backupConnStr">generated backup connection string</param>
         private void save(string primaryConnStr, string backupConnStr)
         {
             var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
@@ -105,6 +112,12 @@ namespace RadioTrack_ReaderClient
             ConfigurationManager.RefreshSection("connectionStrings");
         }
 
+        /// <summary>
+        /// Validate that a connection configuration is valid (connects to the database)
+        /// </summary>
+        /// <param name="ConnStrBuilder">The MySqlConnectionStringBuilder object of a connection configuration</param>
+        /// <param name="error">Returns a MySqlException if an exception is thrown</param>
+        /// <returns>true = configuration is valid</returns>
         private bool validateConnection(MySqlConnectionStringBuilder ConnStrBuilder, out Exception error)
         {
             error = (Exception)null;
@@ -129,6 +142,7 @@ namespace RadioTrack_ReaderClient
             { return true; }
         }
 
+        // Validate the 'Port' fields for a valid int between 1 and 65535
         #region Port Validating
         private void tb_port_p_Validating(object sender, CancelEventArgs e)
         {

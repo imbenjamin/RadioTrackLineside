@@ -85,6 +85,10 @@ namespace RadioTrack_ReaderClient
             cb_stationPicker.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// Handles switching Database connection configurations
+        /// </summary>
+        /// <param name="connToUse">either "primary" or "backup"</param>
         private void setDatabaseConn(string connToUse)
         {
             ConfigurationManager.RefreshSection("connectionStrings");
@@ -113,6 +117,10 @@ namespace RadioTrack_ReaderClient
             }
         }
 
+        /// <summary>
+        /// Handles changing the UI language
+        /// </summary>
+        /// <param name="langCode">Either "en" or "de"</param>
         private void setLanguage(string langCode)
         {
             culture = CultureInfo.CreateSpecificCulture(langCode);
@@ -135,6 +143,9 @@ namespace RadioTrack_ReaderClient
             applyUiLanguage();
         }
 
+        /// <summary>
+        /// Applies the set language
+        /// </summary>
         private void applyUiLanguage()
         {
             lbl_thisStationLabel.Text = resMan.GetString("label_this_station", culture);
@@ -157,6 +168,10 @@ namespace RadioTrack_ReaderClient
 
         }
 
+        /// <summary>
+        /// Toggles the application status
+        /// </summary>
+        /// <param name="newStatus">true = Ready; false = Waiting</param>
         private void allStatusToggle(bool newStatus)
         {
             switch (newStatus)
@@ -257,6 +272,10 @@ namespace RadioTrack_ReaderClient
             }
         }
 
+        /// <summary>
+        /// Get the RFID tag ID from the reader device
+        /// </summary>
+        /// <returns>long of the ID (decimalised)</returns>
         private long getCardId()
         {
             string rawId = "";
@@ -280,6 +299,10 @@ namespace RadioTrack_ReaderClient
             return decId;
         }
 
+        /// <summary>
+        /// Process a given RFID tag ID
+        /// </summary>
+        /// <param name="cardId">The RFID tag ID (Decimalised)</param>
         private void parseCard(long cardId)
         {
             string vehicleVin = "";
@@ -327,6 +350,10 @@ namespace RadioTrack_ReaderClient
             MessageBox.Show("Uncomment lines to submit to database!", "Commit to database", MessageBoxButtons.OK);
         }
 
+        /// <summary>
+        /// Display a build configuration in the UI given an array of configuration codes
+        /// </summary>
+        /// <param name="configList">string array of configuration codes</param>
         private void displayBuildCard(string[] configList)
         {
             textbox_buildCard.Text = resMan.GetString("misc_build_configuration", culture) + "\u2028\u2029";
@@ -342,6 +369,11 @@ namespace RadioTrack_ReaderClient
             }
         }
 
+        /// <summary>
+        /// Returns a build configuration description from a given code
+        /// </summary>
+        /// <param name="code">The configuration code</param>
+        /// <returns>string of the configuration description</returns>
         private string getConfigDescFromCode(string code)
         {
             string result = resMan.GetString("misc_description_not_found", culture);
@@ -603,6 +635,10 @@ namespace RadioTrack_ReaderClient
             this.Update();
         }
 
+        /// <summary>
+        /// Checks if the current Windows user is in the Administrator user group
+        /// </summary>
+        /// <returns>true = use is administrator</returns>
         private bool isUserAdministrator()
         {
             WindowsIdentity user = WindowsIdentity.GetCurrent();
@@ -611,6 +647,14 @@ namespace RadioTrack_ReaderClient
             return result;
         }
 
+        /// <summary>
+        /// Update the database with a vehicle's new location
+        /// </summary>
+        /// <param name="vin">VIN of the vehicle to update</param>
+        /// <param name="rfidId">RFID tag ID of the vehicle</param>
+        /// <param name="newStationId">The new station's ID</param>
+        /// <param name="newTimestamp">Timestamp when the vehicle was scanned</param>
+        /// <returns>True = transaction success</returns>
         private bool submitStationRegister(string vin, string rfidId, string newStationId, DateTime newTimestamp)
         {
             bool pass = false;
@@ -672,6 +716,12 @@ namespace RadioTrack_ReaderClient
             return pass;
         }
 
+        /// <summary>
+        /// Determine a build status given the current station and the station history
+        /// </summary>
+        /// <param name="stationId">ID of the current station</param>
+        /// <param name="stationHistory">database string of the station history</param>
+        /// <returns>int ID of the build status</returns>
         private int getBuildStatusFromStationId(string stationId, string stationHistory)
         {
             int result = 2;
